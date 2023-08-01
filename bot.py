@@ -41,8 +41,6 @@ def run_discord_bot():
                     message = create_message(new_chapters)
                     await channel.send(message)
 
-                else:
-                    await channel.send('No new chapters as of now...')
             else:
                 print(f'Channel not found.')
 

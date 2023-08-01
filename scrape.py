@@ -50,7 +50,7 @@ def get_newest_chapters(end_of_arc):
     file_name = 'chapter_count.json'
 
     # check to see if I input an !end message to signify the end of the current part
-    if end_of_arc:
+    if not end_of_arc:
         url = 'https://witchculttranslation.com/arc-8/'
     else:
         # TODO: finish changing to next arc
@@ -80,6 +80,3 @@ def get_newest_chapters(end_of_arc):
             new_chapters_wc[ch.get_text()] = find_word_count(ch_link)
 
     return new_chapters_wc
-
-
-get_newest_chapters(True)
