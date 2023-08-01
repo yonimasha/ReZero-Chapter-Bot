@@ -13,7 +13,7 @@ def create_message(chapters):
     message = f"Detected {len(chapters)} new chapter(s): \n\n"
 
     for chapter, word_count in chapters.items():
-        message += f'• {chapter}\n\t-- There is roughly around {word_count} words in this chapter.\n\n'
+        message += f'• {chapter}\n\t-- There are roughly around {word_count} words in this chapter.\n\n'
 
     message += "I will let you know if any more chapters appear in the future."
 
