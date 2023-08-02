@@ -5,6 +5,11 @@ import time
 
 
 def create_message(chapters):
+    """
+    Create message when new chapters are detected
+    :param chapters: dictionary with chapter titles and word counts
+    :return: message
+    """
 
     message = f"Detected {len(chapters)} new chapter(s): \n\n"
 
@@ -31,15 +36,12 @@ def run_discord_bot():
 
         while True:
 
-            new_chapters = scrape.get_newest_chapters(True)
+            new_chapters = scrape.get_newest_chapters()
 
             if channel:
                 if len(new_chapters) > 0:
                     message = create_message(new_chapters)
                     await channel.send(message)
-                else:
-                    await channel.send("No new chapters in the last hour.")
-
             else:
                 print(f'Channel not found.')
 

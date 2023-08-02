@@ -5,6 +5,12 @@ import string
 
 
 def find_word_count(chap_link):
+    """
+    Find word counts for the provided chapter link
+    :param chap_link:
+    :return:
+    """
+
     chapter_data = requests.get(chap_link)
 
     chapter_content = BeautifulSoup(chapter_data.content, 'html.parser')
@@ -29,6 +35,12 @@ def find_word_count(chap_link):
 
 
 def update_chapter_count(file_name, chapters_size):
+    """
+
+    :param file_name: the name of the .json file that carries the current # of chapters
+    :param chapters_size: the amount of chapters currently out right now
+    :return: the number of new chapters (usually is 1 but sometimes can be more)
+    """
 
     new_chaps = 0
 
@@ -49,19 +61,20 @@ def update_chapter_count(file_name, chapters_size):
     return new_chaps
 
 
-def get_newest_chapters(end_of_arc):
+def get_newest_chapters():
+    """
+    Get the newest chapters' titles and word counts
+    :return: dictionary with the new chapters and their associated word counts
+    """
 
     file_name = 'chapter_count.json'
 
-    # check to see if I input an !end message to signify the end of the current part
-    if not end_of_arc:
-        url = 'https://witchculttranslation.com/arc-8/'
-    else:
-        # TODO: finish changing to next arc
-        url = 'https://witchculttranslation.com/arc-8/'
+    url = 'https://witchculttranslation.com/arc-8/'
 
     # scrape website data, specifically the li elements (chapters)
     data = requests.get(url)
+
+    chapters = []
 
     if data.status_code == 200:
         arc_content = BeautifulSoup(data.content, 'html.parser')
@@ -69,10 +82,11 @@ def get_newest_chapters(end_of_arc):
         items = div.find_all('li')
         print()
         # not all li elements are chapters, so we have to filter
-        chapters = []
         for item in items:
             if item.text.startswith("Chapter"):
                 chapters.append(item)
+    else:
+        print('Error')
 
     new_chapter_count = update_chapter_count(file_name, len(chapters))
 
