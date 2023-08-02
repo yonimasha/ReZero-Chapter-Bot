@@ -1,6 +1,6 @@
 import discord
 import scrape
-import time
+import asyncio
 
 
 
@@ -34,7 +34,7 @@ def run_discord_bot():
 
         channel = client.get_channel(1134582687085109454)
 
-        while True:
+        while not client.is_closed():
 
             new_chapters = scrape.get_newest_chapters()
 
@@ -42,9 +42,11 @@ def run_discord_bot():
                 if len(new_chapters) > 0:
                     message = create_message(new_chapters)
                     await channel.send(message)
+                else:
+                    await channel.send("No new chapters...")
             else:
                 print(f'Channel not found.')
 
-            time.sleep(3600)
+            await asyncio.sleep(10)
 
     client.run(TOKEN)
