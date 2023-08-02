@@ -29,20 +29,24 @@ def find_word_count(chap_link):
 
 
 def update_chapter_count(file_name, chapters_size):
+
+    new_chaps = 0
+
     try:
         with open(file_name, 'r') as file:
             data = json.load(file)
             chapter_count = data.get('chapter_count', 0)
             if chapters_size > chapter_count:
-                chapter_count += (chapters_size - chapter_count)  # increment the chapter count
-                return chapter_count  # return number of new chapters
+                new_chaps = (chapters_size - chapter_count)  # increment the chapter count
+                chapter_count = chapters_size
+                data['chapter_count'] = chapter_count
     except (FileNotFoundError, json.JSONDecodeError):
         print("Error updating chapter count")
 
     with open(file_name, 'w') as file:
         json.dump({'chapter_count': chapter_count}, file, indent=4)
 
-    return 0  # if no new chapters return 0
+    return new_chaps
 
 
 def get_newest_chapters(end_of_arc):
@@ -63,7 +67,7 @@ def get_newest_chapters(end_of_arc):
         arc_content = BeautifulSoup(data.content, 'html.parser')
         div = arc_content.find('div', class_='entry-content')
         items = div.find_all('li')
-
+        print()
         # not all li elements are chapters, so we have to filter
         chapters = []
         for item in items:

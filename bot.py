@@ -1,7 +1,6 @@
 import discord
 import scrape
 import time
-import random
 from datetime import datetime
 
 
@@ -10,7 +9,7 @@ def create_message(chapters):
     current_datetime = datetime.now()
     current_clock_time = current_datetime.strftime("%I:%M %p")
 
-    message = f"Detected {len(chapters)} new chapter(s): \n\n"
+    message = f"Detected {len(chapters)} new chapter(s) at {current_clock_time}: \n\n"
 
     for chapter, word_count in chapters.items():
         message += f'• {chapter}\n\t-- There are roughly around {word_count} words in this chapter.\n\n'
@@ -18,6 +17,7 @@ def create_message(chapters):
     message += "I will let you know if any more chapters appear in the future."
 
     return message
+
 
 def run_discord_bot():
 
@@ -40,10 +40,12 @@ def run_discord_bot():
                 if len(new_chapters) > 0:
                     message = create_message(new_chapters)
                     await channel.send(message)
+                else:
+                    await channel.send("No new chapters in the last hour.")
 
             else:
                 print(f'Channel not found.')
 
-            time.sleep(random.randint(5, 20))
+            time.sleep(3600)
 
     client.run(TOKEN)
