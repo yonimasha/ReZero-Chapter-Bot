@@ -1,15 +1,12 @@
 import discord
 import scrape
 import time
-from datetime import datetime
+
 
 
 def create_message(chapters):
 
-    current_datetime = datetime.now()
-    current_clock_time = current_datetime.strftime("%I:%M %p")
-
-    message = f"Detected {len(chapters)} new chapter(s) at {current_clock_time}: \n\n"
+    message = f"Detected {len(chapters)} new chapter(s): \n\n"
 
     for chapter, word_count in chapters.items():
         message += f'• {chapter}\n\t-- There are roughly around {word_count} words in this chapter.\n\n'
