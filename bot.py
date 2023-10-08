@@ -1,7 +1,7 @@
 import discord
 import scrape
 import asyncio
-
+from scrape import ChapterScraper
 
 
 def create_message(chapters):
@@ -27,6 +27,8 @@ def run_discord_bot():
     intents = discord.Intents.default()
     intents.message_content = True
     client = discord.Client(intents=intents)
+    scraper = ChapterScraper()
+    new_chapters = {}
 
     @client.event
     async def on_ready():
@@ -36,17 +38,21 @@ def run_discord_bot():
 
         while not client.is_closed():
 
-            new_chapters = scrape.get_newest_chapters()
+            new_chapters = scraper.get_newest_chapters()
 
             if channel:
                 if len(new_chapters) > 0:
                     message = create_message(new_chapters)
                     await channel.send(message)
-                else:
-                    await channel.send("No new chapters...")
             else:
                 print(f'Channel not found.')
 
-            await asyncio.sleep(10)
+            await asyncio.sleep(3600)
+
+    @client.event
+    async def on_message(message):
+        print("Message recieved!")
+        if message.content == "!wordcount":
+            await message.channel.send(f"Current arc's word count: Approximately {sum(new_chapters.values())} words ")
 
     client.run(TOKEN)
